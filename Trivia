@@ -1,0 +1,67 @@
+import tkinter as tk
+from tkinter import messagebox
+
+# Preguntas y respuestas
+preguntas = [
+    {"pregunta": "¿Cuál es mi color favorito?", "respuesta": "azul"},
+    {"pregunta": "¿Qué me gustaría estudiar en el futuro?", "respuesta": "programación"},
+    {"pregunta": "¿Cuál es mi película favorita?", "respuesta": "inception"},
+    # Agrega más preguntas según lo deseen
+]
+
+# Variables globales
+indice_pregunta = 0
+puntos = 0
+
+# Función para verificar la respuesta
+def verificar_respuesta():
+    global indice_pregunta, puntos
+    respuesta_usuario = entrada_respuesta.get().strip().lower()
+    
+    if respuesta_usuario == preguntas[indice_pregunta]["respuesta"]:
+        puntos += 1
+        messagebox.showinfo("Correcto", "¡Respuesta correcta!")
+    else:
+        messagebox.showinfo("Incorrecto", f"Respuesta incorrecta. La respuesta era: {preguntas[indice_pregunta]['respuesta']}")
+    
+    indice_pregunta += 1
+    
+    if indice_pregunta < len(preguntas):
+        mostrar_pregunta()
+    else:
+        mostrar_resultado()
+
+# Función para mostrar la siguiente pregunta
+def mostrar_pregunta():
+    etiqueta_pregunta.config(text=preguntas[indice_pregunta]["pregunta"])
+    entrada_respuesta.delete(0, tk.END)
+
+# Función para mostrar el resultado final
+def mostrar_resultado():
+    etiqueta_pregunta.config(text=f"¡Juego terminado! Obtuviste {puntos} de {len(preguntas)} puntos.")
+    entrada_respuesta.pack_forget()
+    boton_verificar.pack_forget()
+
+# Configuración de la interfaz
+ventana = tk.Tk()
+ventana.title("Juego de Preguntas Personales")
+ventana.geometry("400x300")
+ventana.config(bg="#DCE3F2")  # Fondo suave
+
+# Estilo de los widgets
+estilo_pregunta = {"font": ("Arial", 14, "bold"), "bg": "#DCE3F2", "fg": "#3A3F5D"}
+estilo_entrada = {"font": ("Arial", 12), "bg": "#FFFFFF", "fg": "#000000"}
+estilo_boton = {"font": ("Arial", 12, "bold"), "bg": "#3A3F5D", "fg": "#FFFFFF", "activebackground": "#5D6D8D"}
+
+etiqueta_pregunta = tk.Label(ventana, text="", **estilo_pregunta)
+etiqueta_pregunta.pack(pady=20)
+
+entrada_respuesta = tk.Entry(ventana, **estilo_entrada, justify="center")
+entrada_respuesta.pack(pady=10, ipadx=5, ipady=5)
+
+boton_verificar = tk.Button(ventana, text="Verificar", command=verificar_respuesta, **estilo_boton)
+boton_verificar.pack(pady=15, ipadx=10, ipady=5)
+
+mostrar_pregunta()
+
+ventana.mainloop()
